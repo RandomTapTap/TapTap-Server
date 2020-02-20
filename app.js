@@ -4,6 +4,9 @@ const http = require('http').createServer(app)
 const oi = require('socket.io')(http)
 const routes = require('./routes')
 
+app.use(express.urlencoded({extended:false}))
+app.use(express.json())
+
 app.get('/', (req, res) => {
     res.status(200).json({data : 'masuk'})
 })

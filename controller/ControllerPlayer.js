@@ -22,6 +22,17 @@ class ControllerPlayer {
                 }
             })
             .then(data => {
+                return Player.update({
+                    RoomId : data.id
+                },
+                {
+                    where : {
+                        username
+                    }
+                })
+
+            })
+            .then(data => {
                 res.status(201).json(data)
             })
             .catch(err => {
