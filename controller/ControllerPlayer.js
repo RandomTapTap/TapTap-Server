@@ -22,17 +22,6 @@ class ControllerPlayer {
                 }
             })
             .then(data => {
-                return Player.update({
-                    RoomId : data.id
-                },
-                {
-                    where : {
-                        username
-                    }
-                })
-
-            })
-            .then(data => {
                 res.status(201).json(data)
             })
             .catch(err => {
@@ -41,16 +30,86 @@ class ControllerPlayer {
     }
     static JoinRoom(req,res,next) {
         const { username } = req.body
+        const { roomid } = req.headers
+        console.log(req.headers)
         Player.findOne({
             where : {
                 username
             }
         })
             .then(data => {
-
+                if(data){
+                    return Player.update({
+                        RoomId : roomid
+                    },
+                    {
+                        where : {
+                            username
+                        }
+                    },
+                    {
+                        returning :true
+                    }
+                    )
+                }else{
+                    next(
+                        {
+                        message : "is undifiend"
+                        }
+                    )
+                }
+            })
+            .then(data => {
+                res.status(200).json(data)
             })
             .catch(err => {
 
+            })
+    }
+    static leaveRoom(req,res,next){
+        const { username } = req.body
+        Player.findOne(
+            {
+                where: {
+                    username
+                }
+            }
+        )
+            .then(data => {
+                if(data){
+                    return Player.update(
+                        {
+                            RoomId : null
+                        },
+                        {
+                            where: {
+                                username
+                            }
+                        }
+                    )
+                }
+            })
+            .then(data => {
+                res.status(200).json(data)
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
+    static delete(req,res,next){
+        const { username } = req.body
+        Player.destroy(
+            {
+                where : {
+                    username
+                }
+            }
+        )
+            .then(data => {
+                res.status(200).json(data)
+            })
+            .catch(err => {
+                next(err)
             })
     }
 }
