@@ -4,6 +4,7 @@ class ControllerRoom {
     static addRoom (req,res,next) {
         const { username } = req.headers
         const { RoomName } = req.body
+        console.log(req.body)
         Room.findOne(
             {
                 where : {
@@ -22,14 +23,6 @@ class ControllerRoom {
                         message : "RoomName is already"
                     })
                 }
-            })
-            .then(data => {
-                return Player.update({RoomId : data.id},{
-                    where : {
-                        username
-                    }
-                })
-                res.status(200).json(data)
             })
             .then(data => {
                 res.status(201).json(data)
