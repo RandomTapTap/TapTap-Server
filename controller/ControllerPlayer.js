@@ -54,7 +54,7 @@ class ControllerPlayer {
                 }else{
                     next(
                         {
-                        message : "is undifiend"
+                        message : "is undefiend"
                         }
                     )
                 }
@@ -63,7 +63,7 @@ class ControllerPlayer {
                 res.status(200).json(data)
             })
             .catch(err => {
-
+                next(err)
             })
     }
     static leaveRoom(req,res,next){
