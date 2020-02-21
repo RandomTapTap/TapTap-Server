@@ -5,7 +5,7 @@ const io = require('socket.io')(http)
 const routes = require('./routes')
 const errorHandler = require('./middlewares/errorHandler');
 const cors = require('cors')
-const { Player } = require('./models')
+const { Player, Room } = require('./models')
 
 app.use(cors())
 app.use(express.urlencoded({extended:false}))
@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
                         RoomMaster : dataClient.username
                     })
                 }else{
-                    next({
+                    console.log({
                         message : "RoomName is already"
                     })
                 }
@@ -75,7 +75,7 @@ io.on('connection', (socket) => {
                     RoomId : data.id
                 },{
                     where : {
-                        username
+                        username: dataClient.username
                     },
                     returning : true
                 })
