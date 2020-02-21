@@ -88,24 +88,22 @@ io.on('connection', (socket) => {
             })
     })
 
-    socket.on('fetchPlayers', payload => {
-        Player.findAll({
-            where: {
-                RoomId: 1
-            }
-            // include: [{
-            //     model: Room
-            // }]
-        })
-        .then(data => {
-            let player = data[0].dataValues
-            console.log(player)
-            io.emit('getPlayers', player)
-        })
-        .catch(err => {
-            console.log(err, "error client fetchplayer")
-        })
-    })
+    // socket.on('fetchPlayers', payload => {
+    //     Player.findAll({
+    //         where: {
+    //             RoomId: 1
+    //         }
+    //         // include: [{
+    //         //     model: Room
+    //         // }]
+    //     })
+    //     .then(data => {
+    //         io.emit('getPlayers', data)
+    //     })
+    //     .catch(err => {
+    //         console.log(err, "error client fetchplayer")
+    //     })
+    // })
 
     socket.on('fetchRooms', () => {
         Room.findAll()
@@ -158,6 +156,24 @@ io.on('connection', (socket) => {
             })
             .then(data => {
                 io.emit('allPlayersInRoom', data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+    socket.on('linkStart', () => {
+        io.emit('linkStarting')
+    }),
+    socket.on('deleteRoom', roomName => {
+        Room.destroy(
+            {
+                where : {
+                    RoomName: roomName
+                }
+            }
+        )
+            .then(_ => {
+                io.emit('roomDeleted')
             })
             .catch(err => {
                 console.log(err)
