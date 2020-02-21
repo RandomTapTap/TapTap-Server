@@ -4,21 +4,43 @@ const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const routes = require('./routes')
 const errorHandler = require('./middlewares/errorHandler');
+const cors = require('cors')
+const { Player } = require('./models')
 
-
+app.use(cors())
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 
-app.get('/', (req, res) => {
-    res.status(200).json({data : 'masuk'})
-})
 app.use(routes)
 
 app.use(errorHandler)
 
 io.on('connection', (socket) => {
     console.log('connect')
-    
+    socket.on('addPlayer', payload => {
+        Player.findOne ({
+            where : {
+                username : payload.username
+            }
+        })
+            .then(data => {
+                if(!data){
+                    return Player.create({
+                        username : payload.username
+                    })
+                }else{
+                    console.log({
+                        message : 'UserName is already'
+                    })
+                }
+            })
+            .then(data => {
+                io.emit('playerAdded', data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
 })
 
 http.listen(4000,() => {
