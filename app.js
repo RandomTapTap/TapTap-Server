@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
                 }
             })
             .then(data => {
-                io.emit('playerAdded', data)
+                socket.emit('playerAdded', data)
             })
             .catch(err => {
                 console.log(err)
@@ -81,13 +81,14 @@ io.on('connection', (socket) => {
                 })
             })
             .then(data => {
-                io.emit('AddRoomMaster', roomData)
+                socket.emit('AddRoomMaster', roomData)
             })
             .catch(err => {
                 console.log(err)
             })
     })
 
+<<<<<<< HEAD
     socket.on('fetchPlayers', payload => {
         Player.findAll({
             where: {
@@ -107,6 +108,17 @@ io.on('connection', (socket) => {
         })
     })
 
+=======
+    socket.on('fetchRooms', () => {
+        Room.findAll()
+            .then(data => {
+                io.emit('showAllRooms', data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+>>>>>>> origin
 })
 
 http.listen(4000,() => {
