@@ -88,6 +88,15 @@ io.on('connection', (socket) => {
             })
     })
 
+    socket.on('fetchRooms', () => {
+        Room.findAll()
+            .then(data => {
+                io.emit('showAllRooms', data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
 })
 
 http.listen(4000,() => {
