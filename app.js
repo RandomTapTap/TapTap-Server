@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const http = require('http').createServer(app)
-const oi = require('socket.io')(http)
+const io = require('socket.io')(http)
 const routes = require('./routes')
 const errorHandler = require('./middlewares/errorHandler');
 
@@ -16,6 +16,11 @@ app.use(routes)
 
 app.use(errorHandler)
 
-app.listen(4000,() => {
-    console.log('let go tap tap')
+io.on('connection', (socket) => {
+    console.log('connect')
+    
+})
+
+http.listen(4000,() => {
+    console.log('connect to 4000')
 })
