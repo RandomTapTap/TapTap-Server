@@ -41,6 +41,53 @@ io.on('connection', (socket) => {
                 console.log(err)
             })
     })
+
+    socket.on('createdRoom', payload => {
+        let dataClient = {
+            RoomName: payload.RoomName,
+            username: payload.username
+        }
+
+        let roomData
+
+        Room.findOne(
+            {
+                where : {
+                    RoomName : dataClient.RoomName
+                }
+            }
+        )
+            .then(data => {
+                if(!data){
+                    return Room.create({
+                        RoomName : dataClient.RoomName,
+                        RoomMaster : dataClient.username
+                    })
+                }else{
+                    next({
+                        message : "RoomName is already"
+                    })
+                }
+            })
+            .then(data => {
+                roomData = data
+                return Player.update({
+                    RoomId : data.id
+                },{
+                    where : {
+                        username
+                    },
+                    returning : true
+                })
+            })
+            .then(data => {
+                io.emit('AddRoomMaster', roomData)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
 })
 
 http.listen(4000,() => {

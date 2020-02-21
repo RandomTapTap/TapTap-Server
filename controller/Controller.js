@@ -5,6 +5,7 @@ class ControllerRoom {
         const { username } = req.headers
         const { RoomName } = req.body
         console.log(req.body)
+        let roomData
         Room.findOne(
             {
                 where : {
@@ -25,17 +26,19 @@ class ControllerRoom {
                 }
             })
             .then(data => {
+                roomData = data
                 console.log(data.id)
                 return Player.update({
                     RoomId : data.id
                 },{
                     where : {
                         username
-                    }
+                    },
+                    returning : true
                 })
             })
             .then(data => {
-                res.status(201).json(data)
+                res.status(201).json(roomData)
             })
             .catch(err => {
                 next(err)
