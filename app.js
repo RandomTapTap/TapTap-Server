@@ -88,6 +88,25 @@ io.on('connection', (socket) => {
             })
     })
 
+    socket.on('fetchPlayers', payload => {
+        Player.findAll({
+            where: {
+                RoomId: 1
+            }
+            // include: [{
+            //     model: Room
+            // }]
+        })
+        .then(data => {
+            let player = data[0].dataValues
+            console.log(player)
+            io.emit('getPlayers', player)
+        })
+        .catch(err => {
+            console.log(err, "error client fetchplayer")
+        })
+    })
+
 })
 
 http.listen(4000,() => {
