@@ -88,7 +88,6 @@ io.on('connection', (socket) => {
             })
     })
 
-<<<<<<< HEAD
     socket.on('fetchPlayers', payload => {
         Player.findAll({
             where: {
@@ -108,7 +107,6 @@ io.on('connection', (socket) => {
         })
     })
 
-=======
     socket.on('fetchRooms', () => {
         Room.findAll()
             .then(data => {
@@ -118,7 +116,6 @@ io.on('connection', (socket) => {
                 console.log(err)
             })
     })
->>>>>>> origin
 })
 
 http.listen(4000,() => {
