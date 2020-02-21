@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
                 }
             })
             .then(data => {
-                io.emit('playerAdded', data)
+                socket.emit('playerAdded', data)
             })
             .catch(err => {
                 console.log(err)
@@ -81,7 +81,7 @@ io.on('connection', (socket) => {
                 })
             })
             .then(data => {
-                io.emit('AddRoomMaster', roomData)
+                socket.emit('AddRoomMaster', roomData)
             })
             .catch(err => {
                 console.log(err)
