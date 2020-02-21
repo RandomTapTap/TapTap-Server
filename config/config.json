@@ -16,11 +16,6 @@
     "operatorsAliases": 0
   },
   "production": {
-    "username": "postgres",
-    "password": null,
-    "database": "TapTap",
-    "host": "127.0.0.1",
-    "dialect": "postgres",
-    "operatorsAliases": 0
+    "use_env-variable": "DATABASE_URL"
   }
 }
