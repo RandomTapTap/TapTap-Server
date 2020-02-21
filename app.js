@@ -116,6 +116,53 @@ io.on('connection', (socket) => {
                 console.log(err)
             })
     })
+
+    socket.on('joinRoom', (payload) => {
+        let dataClient = {
+            username: payload.username,
+            idRoom: payload.idRoom
+        }
+        Player.findOne({
+            where : {
+                username : dataClient.username
+            }
+        })
+            .then(data => {
+                if(data){
+                    return Player.update({
+                        RoomId : dataClient.idRoom
+                    },
+                    {
+                        where : {
+                            username : dataClient.username
+                        }
+                    },
+                    {
+                        returning :true
+                    }
+                    )
+                }else{
+                    next(
+                        {
+                        message : "is undefiend"
+                        }
+                    )
+                }
+            })
+            .then(data => {
+                return Player.findAll({
+                    where : {
+                        RoomId: dataClient.idRoom
+                    }
+                })
+            })
+            .then(data => {
+                io.emit('allPlayersInRoom', data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
 })
 
 http.listen(4000,() => {
